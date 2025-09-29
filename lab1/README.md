@@ -105,8 +105,3 @@ Este laboratorio consiste en una aplicación web simple desarrollada con Python 
 - [Tutorial de Flask](https://flask.palletsprojects.com/en/2.0.x/tutorial/)
 - [Documentación de Bootstrap](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
 - [Fundamentos de Sistemas de Información](https://www.tutorialspoint.com/management_information_system/index.htm)
-
-## Notas
-
-- Esta aplicación es solo para fines educativos y no debe utilizarse en un entorno de producción sin implementar medidas de seguridad adecuadas
-- El almacenamiento en archivos JSON es simple pero no adecuado para aplicaciones reales con múltiples usuarios o grandes volúmenes de datos
