@@ -39,34 +39,7 @@ Este laboratorio consiste en una aplicación web simple desarrollada con Python 
 
 ## Instalación
 
-### Opción 1: Instalación Local
-
-1. Clona o descarga este repositorio en tu máquina local
-
-2. Crea un entorno virtual (opcional pero recomendado):
-
-   ```bash
-   python -m venv venv
-   ```
-
-3. Activa el entorno virtual:
-
-   - En Windows:
-     ```bash
-     venv\Scripts\activate
-     ```
-   - En macOS/Linux:
-     ```bash
-     source venv/bin/activate
-     ```
-
-4. Instala las dependencias:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-### Opción 2: Instalación con Docker
+### Instalación con Docker
 
 1. Asegúrate de tener Docker y Docker Compose instalados en tu sistema
 
@@ -74,17 +47,7 @@ Este laboratorio consiste en una aplicación web simple desarrollada con Python 
 
 ## Ejecución
 
-### Opción 1: Ejecución Local
-
-1. Ejecuta la aplicación:
-
-   ```bash
-   python app.py
-   ```
-
-2. Abre tu navegador y visita [http://localhost:5000](http://localhost:5000)
-
-### Opción 2: Ejecución con Docker
+### Ejecución con Docker
 
 1. Construye y ejecuta el contenedor con Docker Compose:
 
