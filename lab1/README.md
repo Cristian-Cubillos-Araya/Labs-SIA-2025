@@ -30,7 +30,6 @@ Este laboratorio consiste en una aplicación web simple desarrollada con Python 
 │   ├── agregar.html           # Formulario para agregar productos
 │   └── editar.html            # Formulario para editar productos
 ├── preguntas_laboratorio.md   # Preguntas relacionadas con el laboratorio
-├── respuestas_laboratorio.md  # Respuestas a las preguntas del laboratorio
 ├── requirements.txt           # Dependencias del proyecto
 ├── Dockerfile                 # Configuración para crear la imagen Docker
 ├── docker-compose.yml         # Configuración para orquestar contenedores
