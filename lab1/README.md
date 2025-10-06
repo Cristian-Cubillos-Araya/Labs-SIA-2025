@@ -1,5 +1,7 @@
 # Laboratorio de Sistemas de Información: Sistema de Gestión de Inventario
 
+## Gmail para envio de informe: cristian.cubillos@userena.cl
+
 Este laboratorio consiste en una aplicación web simple desarrollada con Python y Flask para la gestión de inventario. La aplicación permite realizar operaciones básicas CRUD (Crear, Leer, Actualizar, Eliminar) sobre productos en un inventario.
 
 ## Objetivos de Aprendizaje
