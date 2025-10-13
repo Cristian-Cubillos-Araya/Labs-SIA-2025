@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard - Mini TPS</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    :root { --primary:#3a86ff; --accent:#ff006e; --bg:#0b0e14; --text:#eaeef3; }
+    body { background: var(--bg); color: var(--text); }
+    header { display:flex; justify-content:space-between; align-items:center; margin: 1rem 0; }
+    .brand { display:flex; align-items:center; gap:.6rem; }
+    .brand .logo { width:32px; height:32px; background:linear-gradient(135deg,var(--primary),var(--accent)); border-radius:8px; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap:1rem; }
+    .card { background:#11151f; border:1px solid #1a2130; border-radius:12px; padding:1rem; box-shadow:0 8px 24px rgba(0,0,0,.35); }
+    a { color: var(--primary); }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <div class="brand">
+        <div class="logo"></div>
+        <h2>Dashboard</h2>
+      </div>
+      <nav>
+        <a href="/">Inicio</a>
+      </nav>
+    </header>
+    <p>Resumen y métricas del sistema de ventas.</p>
+
+    <section class="card">
+      <h2>Resumen</h2>
+      <div id="summary">
+        <p>Total de ventas: <strong id="total_sales">0</strong></p>
+        <p>Ingresos totales: <strong id="total_revenue">0.00</strong></p>
+        <p>Productos: <strong id="products_count">0</strong> | Clientes: <strong id="customers_count">0</strong></p>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:1rem;">
+      <h2>Ventas por fecha</h2>
+      <canvas id="salesByDate"></canvas>
+    </section>
+
+    <section class="grid" style="margin-top:1rem;">
+      <div class="card">
+      <h2>Top productos por cantidad</h2>
+      <canvas id="topProducts"></canvas>
+      </div>
+      <div class="card">
+        <h2>Stock actual</h2>
+        <canvas id="stockChart"></canvas>
+      </div>
+    </section>
+
+    
+
+    <footer>
+      <p><a href="/">Volver</a></p>
+    </footer>
+  </main>
+
+  <script>
+    async function fetchJSON(url){
+      const r = await fetch(url);
+      return await r.json();
+    }
+
+    async function loadSummary(){
+      const s = await fetchJSON('/api/stats/summary');
+      document.getElementById('total_sales').textContent = s.total_sales;
+      document.getElementById('total_revenue').textContent = Number(s.total_revenue).toFixed(2);
+      document.getElementById('products_count').textContent = s.products_count;
+      document.getElementById('customers_count').textContent = s.customers_count;
+    }
+
+    function renderLineChart(ctxId, labels, data, label){
+      const ctx = document.getElementById(ctxId);
+      new Chart(ctx, {
+        type: 'line',
+        data: { labels, datasets: [{ label, data, borderColor: '#3a86ff', tension: 0.2 }] },
+        options: { responsive: true, plugins: { legend: { display: true } } }
+      });
+    }
+
+    function renderBarChart(ctxId, labels, data, label){
+      const ctx = document.getElementById(ctxId);
+      new Chart(ctx, {
+        type: 'bar',
+        data: { labels, datasets: [{ label, data, backgroundColor: '#ff006e' }] },
+        options: { responsive: true, plugins: { legend: { display: true } } }
+      });
+    }
+
+    async function loadSalesByDate(){
+      const rows = await fetchJSON('/api/stats/sales_by_date');
+      const labels = rows.map(r => r.date);
+      const data = rows.map(r => r.count);
+      renderLineChart('salesByDate', labels, data, 'Ventas');
+    }
+
+    async function loadTopProducts(){
+      const rows = await fetchJSON('/api/stats/top_products');
+      const labels = rows.map(r => r.product);
+      const data = rows.map(r => r.qty);
+      renderBarChart('topProducts', labels, data, 'Cantidad vendida');
+    }
+
+    async function loadStock(){
+      const rows = await fetchJSON('/api/stats/stock');
+      const labels = rows.map(r => r.product);
+      const data = rows.map(r => r.stock);
+      renderBarChart('stockChart', labels, data, 'Stock');
+    }
+
+    async function init(){
+      await loadSummary();
+      await loadSalesByDate();
+      await loadTopProducts();
+      await loadStock();
+    }
+    init();
+  </script>
+</body>
+</html>

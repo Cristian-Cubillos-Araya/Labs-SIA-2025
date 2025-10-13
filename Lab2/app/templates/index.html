@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mini TPS - Ventas</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    :root { --primary:#3a86ff; --accent:#ff006e; --bg:#0b0e14; --text:#eaeef3; }
+    body { background: var(--bg); color: var(--text); }
+    header { display:flex; justify-content:space-between; align-items:center; margin: 1rem 0; }
+    .brand { display:flex; align-items:center; gap:.6rem; }
+    .brand .logo { width:32px; height:32px; background:linear-gradient(135deg,var(--primary),var(--accent)); border-radius:8px; }
+    .card { background:#11151f; border:1px solid #1a2130; border-radius:12px; padding:1rem; box-shadow:0 8px 24px rgba(0,0,0,.35); }
+    table { background:#0f131d; }
+    a { color: var(--primary); }
+    button { background: var(--primary); }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <div class="brand">
+        <div class="logo"></div>
+        <h2>Mini TPS (Flask + SQLite)</h2>
+      </div>
+      <nav>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/api/products" target="_blank">API Productos</a>
+        <a href="/api/sales" target="_blank">API Ventas</a>
+      </nav>
+    </header>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <article>
+          {% for m in messages %}
+            <p>{{ m }}</p>
+          {% endfor %}
+        </article>
+      {% endif %}
+    {% endwith %}
+
+    <section class="card">
+      <h2>Registrar Venta</h2>
+      <form method="POST" action="{{ url_for('sale') }}">
+        <label>Cliente</label>
+        <select name="customer_id" required>
+          {% for c in customers %}
+            <option value="{{ c.id }}">{{ c.name }} ({{ c.email }})</option>
+          {% endfor %}
+        </select>
+        <h3>Productos</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in products %}
+            <tr>
+              <td>{{ p.name }}</td>
+              <td>{{ '%.2f'|format(p.price) }}</td>
+              <td>{{ p.stock }}</td>
+              <td>
+                <input type="number" min="0" name="qty_{{ p.id }}" value="0" />
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <button type="submit">Registrar</button>
+      </form>
+    </section>
+
+    <section class="card" style="margin-top:1rem;">
+      <h2>Ventas Recientes</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in sales %}
+          <tr>
+            <td>{{ s.id }}</td>
+            <td>{{ s.customer }}</td>
+            <td>{{ '%.2f'|format(s.total) }}</td>
+            <td>{{ s.created_at }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      <p>API: <a href="{{ url_for('api_products') }}" target="_blank">/api/products</a> | <a href="{{ url_for('api_sales') }}" target="_blank">/api/sales</a></p>
+    </footer>
+  </main>
+</body>
+</html>
